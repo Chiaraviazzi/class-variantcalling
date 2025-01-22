@@ -11,14 +11,12 @@ cd analysis
 
 mkdir -p raw_data
 
-cd raw_data
-
 cd /config/workspace/datiesame
 
 tar -xzvf data_resequencing.tar.gz -C /config/workspace/class-variantcalling/analysis/raw_data
 
-#per ottenere il path corretto di raw_data cliccare con tasto destro su raw_data
-#al posto del comando sopra riportato possiamo fare solo tar -xzvf data_resequencing.tar.gz e poi spostare manualmente i campioni
+##per ottenere il path corretto di raw_data cliccare con tasto destro su raw_data
+##al posto del comando sopra riportato possiamo fare solo tar -xzvf data_resequencing.tar.gz e poi spostare manualmente i campioni
 
 cd ..
 
@@ -29,14 +27,14 @@ mkdir -p alignment
 cd alignment
 
 ## now we can perform the alignment with BWA
-##i nomi dei campioni, dopo raw_data, potrebbero cambiare all'esame
+##i nomi dei campioni, dopo raw_data, potrebbero cambiare all'esame (potrebbe essere control_1 e case_1, i primi sono sempre i controlli)
 
 bwa mem \
 -t 2 \
 -R "@RG\tID:sim\tSM:normal\tPL:illumina\tLB:sim" \
 /config/workspace/datiesame/datasets_reference_only/sequence/Homo_sapiens_assembly38_chr21.fasta \
 /config/workspace/class-variantcalling/analysis/raw_data/normal_1.000+disease_0.000_1.fq.gz \
-/config/workspace/class-variantcalling/analysis/raw-data/normal_1.000+disease_0.000_2.fq.gz \
+/config/workspace/class-variantcalling/analysis/raw_data/normal_1.000+disease_0.000_2.fq.gz \
 | samtools view -@ 2 -bhS -o normal.bam -
 
 ## Real time: 176.099 sec; CPU: 256.669 sec
@@ -156,7 +154,7 @@ gatk --java-options "-Xmx4g" GenotypeGVCFs \
 #fare pwd per essere sicuri a questo punto di essere nella cartella variants
 
 
-### to execute snpeff we need to contain the memory
+### to execute snpeff we need to contain the memory controllare il path di snpeff_data
 snpEff -Xmx4g ann -dataDir /config/workspace/snpeff_data -v hg38 results.vcf.gz >results_ann.vcf
 
 
@@ -170,7 +168,7 @@ cat results_ann.vcf | grep HIGH | perl -nae 'if($F[10]=~/0\/0/ && $F[9]=~/0\/1/)
 
 sudo conda install bioconda::snpsift
 
-#la password per bioconda è student
+##la password per bioconda è student
 
 SnpSift extractFields \
 -s "," -e "." \

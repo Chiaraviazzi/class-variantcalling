@@ -17,7 +17,7 @@ tar -xzvf data_resequencing.tar.gz -C /config/workspace/class-variantcalling/ana
 
 ##per ottenere il path corretto di raw_data cliccare con tasto destro su raw_data
 ##al posto del comando sopra riportato possiamo fare solo tar -xzvf data_resequencing.tar.gz e poi spostare manualmente i campioni
-
+##ricordati di tornare in workspace
 cd ..
 
 cd class-variantcalling/analysis
@@ -50,14 +50,13 @@ bwa mem \
 ## Real time: 173.232 sec; CPU: 256.204 sec
 
 
-# sort the bam file
+# sort the bam file controlla sempre che ci sia .bam
 samtools sort -o normal_sorted.bam normal.bam
 samtools sort -o disease_sorted.bam disease.bam
 
-# index the bam file
+# index the bam file controlla sempre che si siano formate le cartelle con bam.bai
 samtools index normal_sorted.bam
 samtools index disease_sorted.bam
-
 
 # Marking duplicates
 
@@ -103,7 +102,7 @@ gatk ApplyBQSR \
    --bqsr-recal-file disease_recal_data.table \
    -O disease_recal.bam
 
-
+##alla fine di questi comandi devo avere 16 file all'interno della cartella alignment
 ### variant calling
 
 cd ..
